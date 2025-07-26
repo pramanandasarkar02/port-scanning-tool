@@ -26,12 +26,8 @@ class OSFingerprint:
     def _ping_ttl_detection(self, ip: str) -> Dict[str, Any]:
         """Use system ping to detect TTL for OS fingerprinting"""
         try:
-            system = platform.system().lower()
-            
-            if system == "windows":
-                cmd = ["ping", "-n", "1", "-w", str(self.timeout * 1000), ip]
-            else:
-                cmd = ["ping", "-c", "1", "-W", str(self.timeout), ip]
+            # system = platform.system().lower()
+            cmd = ["ping", "-c", "1", "-W", str(self.timeout), ip]
             
             result = subprocess.run(cmd, capture_output=True, text=True, timeout=self.timeout + 2)
             
@@ -178,7 +174,7 @@ class OSFingerprint:
         
         results = []
         
-        # Method 1: Scapy-based (if available and privileged)
+        #Scapy-based (if available and privileged)
         if SCAPY_AVAILABLE:
             scapy_result = self._scapy_fingerprint(ip)
             if scapy_result and scapy_result.get("confidence", 0) > 0:
@@ -186,21 +182,20 @@ class OSFingerprint:
                 if self.verbose:
                     print(f"Scapy result: {scapy_result['os']} ({scapy_result['confidence']*100:.1f}%)")
         
-        # Method 2: Ping TTL detection (always available)
+        #Ping TTL detection (always available)
         ping_result = self._ping_ttl_detection(ip)
         if ping_result and ping_result.get("confidence", 0) > 0:
             results.append(ping_result)
             if self.verbose:
                 print(f"Ping result: {ping_result['os']} ({ping_result['confidence']*100:.1f}%)")
         
-        # Method 3: TCP connect port pattern analysis
+        #TCP connect port pattern analysis
         tcp_result = self._tcp_connect_fingerprint(ip)
         if tcp_result and tcp_result.get("confidence", 0) > 0:
             results.append(tcp_result)
             if self.verbose:
                 print(f"TCP pattern result: {tcp_result['os']} ({tcp_result['confidence']*100:.1f}%)")
-        
-        # Choose best result
+
         if results:
             best_result = max(results, key=lambda x: x.get("confidence", 0))
             

@@ -8,13 +8,13 @@ async def main():
     parser = argparse.ArgumentParser(
         description="Enhanced Network Security Scanner",
         formatter_class=argparse.RawDescriptionHelpFormatter,
-        epilog="""
-Examples:
-  python -m src.main example.com
-  python -m src.main 192.168.1.1 -p top1000 -t connect,syn
-  python -m src.main 10.0.0.0/24 --discover
-  python -m src.main target.com -p 1-1000 -t connect,udp,os --threads 200
-        """
+#         epilog="""
+# Examples:
+#   python -m src.main example.com
+#   python -m src.main 192.168.1.1 -p top1000 -t connect,syn
+#   python -m src.main 10.0.0.0/24 --discover
+#   python -m src.main target.com -p 1-1000 -t connect,udp,os --threads 200
+#         """
     )
     parser.add_argument("target", help="Target IP, hostname, or network (CIDR)")
     parser.add_argument("-p", "--ports", default="common", 
@@ -65,6 +65,6 @@ Examples:
             traceback.print_exc()
 
 if __name__ == "__main__":
-    if sys.platform == "win32":
-        asyncio.set_event_loop_policy(asyncio.WindowsProactorEventLoopPolicy())
+    # if sys.platform == "win32":
+    #     asyncio.set_event_loop_policy(asyncio.WindowsProactorEventLoopPolicy())
     asyncio.run(main())

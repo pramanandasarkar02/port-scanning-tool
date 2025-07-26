@@ -89,7 +89,7 @@ class PortScanner:
                 pass
             else:
                 writer.write(b'\r\n')
-            await writer.drain()
+            await writer.drain()            # need to complete request ????
             banner = await asyncio.wait_for(reader.read(1024), timeout=2)
             writer.close()
             await writer.wait_closed()
