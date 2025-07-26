@@ -120,3 +120,4 @@ class PortScanner:
                 except Exception as e:
                     results.append({"error": str(e)})
         return results
+    
